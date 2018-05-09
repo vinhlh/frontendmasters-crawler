@@ -1,0 +1,12 @@
+{
+  "cookie": {
+    "name": "wordpress_logged_in_xxxxxxx",
+    "value": "yyyyyy"
+  },
+  "bucketName": "my-own-bucket",
+  "courseId": "advanced-react-patterns",
+  "slack": {
+    "hook": "https://hooks.slack.com/services/zzzzzz",
+    "channel": "#vl-exceptions"
+  }
+}
