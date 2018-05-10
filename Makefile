@@ -1,5 +1,5 @@
 run:
-	node functions/fm_crawler/run.js
+	DEV=true node functions/fm_crawler/run.js
 
 run-lambda:
 	cat functions/fm_crawler/event.json | apex invoke fm_crawler
