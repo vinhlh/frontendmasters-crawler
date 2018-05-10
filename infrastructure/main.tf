@@ -1,5 +1,9 @@
 provider "aws" {}
 
+variable "bucket_name" {
+  type = "string"
+}
+
 variable "apex_function_fm_crawler" {
   type = "string"
 }
@@ -30,7 +34,7 @@ resource "aws_lambda_permission" "fm_crawler" {
 }
 
 resource "aws_s3_bucket" "storage" {
-  bucket = "my-own-bucket"
+  bucket = "${var.bucket_name}"
   acl    = "public-read"
 
   tags {
