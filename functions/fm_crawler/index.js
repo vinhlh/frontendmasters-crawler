@@ -1,4 +1,4 @@
-import λ from 'apex.js'
+const λ = require('apex.js')
 const crawl = require('./crawl')
 
 exports.handle = λ(event => {
