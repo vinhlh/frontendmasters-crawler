@@ -7,8 +7,11 @@ run-lambda:
 deploy:
 	apex deploy
 
-sync:
-	aws s3 cp courses.json s3://your_bucket/ --acl public-read
+upload:
+	aws s3 cp courses.json s3://my_bucket/ --acl public-read
+
+download:
+	aws s3 cp s3://my_bucket/courses.json courses.json
 
 apply:
 	apex infra apply --var-file=live.tfvars
