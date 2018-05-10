@@ -1,7 +1,7 @@
 {
   "name": "frontendmasters-crawler",
   "description": "FrontEndMasters.com crawler",
-  "memory": 512,
+  "memory": 1024,
   "timeout": 300,
   "role": "arn:aws:iam::589072213673:role/frontendmasters-crawler_lambda_function",
   "environment": {},
