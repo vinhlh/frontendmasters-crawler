@@ -62,6 +62,21 @@ const fetchAllCourses = (bucketName, inputFile) =>
     .then(data => data.Body.toString())
     .then(JSON.parse)
 
+const isVideoExistOnS3 = async (bucketName, courseId, lessonHash) => {
+  try {
+    await s3
+      .getObject({
+        Bucket: bucketName,
+        Key: getLessonLocation(courseId, lessonHash)
+      }, err => !!err)
+      .promise()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+
 const makeAuthenticatedOptions = cookie => ({
   headers: {
     Cookie: cookie.name + '=' + cookie.value,
@@ -99,11 +114,13 @@ const getVideoUrl = (lessonHash, authenticatedOptions) =>
 
 const getVideoBuffer = url => fetch(url).then(resp => resp.buffer())
 
+const getLessonLocation = (courseId, lessonHash) => `${courseId}/${lessonHash}.webm`
+
 const saveVideoToS3 = (bucketName, courseId, lessonHash, buffer) =>
   s3
     .putObject({
       Bucket: bucketName,
-      Key: `${courseId}/${lessonHash}.webm`,
+      Key: getLessonLocation(courseId, lessonHash),
       Body: buffer,
       ContentType: 'video/webm',
       ACL: 'public-read'
@@ -137,6 +154,13 @@ const crawl = async configs => {
     await sleep(5000)
 
     await Promise.mapSeries(courseInfo.lessonHashes, async lessonHash => {
+      const existed = await isVideoExistOnS3(bucketName, courseId, lessonHash)
+
+      if (existed) {
+        console.warn('Found a video existed', lessonHash)
+        return
+      }
+
       const videoUrl = await getVideoUrl(lessonHash, authenticatedOptions)
 
       console.warn(`Downloading ${videoUrl}`)
