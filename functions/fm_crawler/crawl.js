@@ -9,6 +9,8 @@ const s3 = new aws.S3()
 
 const API_SERVER = 'https://api.frontendmasters.com/v1/kabuki'
 
+const DELAY_BETWEEN_LESSIONS = 30000
+
 const getApiEndpoint = (name, { id }) =>
   API_SERVER +
   {
@@ -158,8 +160,6 @@ const crawl = async configs => {
 
     await storeInfoToS3(courseId, courseInfo, bucketName)
 
-    await sleep(5000)
-
     await Promise.mapSeries(courseInfo.lessonHashes, async lessonHash => {
       console.warn('Checking if video existed', lessonHash)
       const existed = await isVideoExistOnS3(bucketName, courseId, lessonHash)
@@ -177,7 +177,7 @@ const crawl = async configs => {
 
       await saveVideoToS3(bucketName, courseId, lessonHash, buffer)
 
-      await sleep(20000)
+      await sleep(DELAY_BETWEEN_LESSIONS)
     })
 
     const latestCourses = await fetchAllCourses(bucketName, inputFile)
