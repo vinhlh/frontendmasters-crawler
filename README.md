@@ -12,5 +12,4 @@ A demo of a serverless crawler built on AWS Lambda.
 - Invoke the function by `cat functions/fm_crawler/event.json| apex invoke fm_crawler`.
 
 ## Local
-In order to execute the crawler in local environment, running:
-`node functions/fm_crawler/run.js`
+In order to execute the crawler in local environment, running `node functions/fm_crawler/run.js`.
