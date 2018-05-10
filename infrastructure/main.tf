@@ -14,7 +14,7 @@ variable "apex_function_names" {
 
 resource "aws_cloudwatch_event_rule" "fm_crawler" {
   name                = "fm-crawler-event-rule"
-  schedule_expression = "rate(15 minutes)"
+  schedule_expression = "rate(10 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "fm_crawler" {

@@ -9,7 +9,7 @@ const s3 = new aws.S3()
 
 const API_SERVER = 'https://api.frontendmasters.com/v1/kabuki'
 
-const DELAY_BETWEEN_LESSIONS = 30000
+const DELAY_BETWEEN_LESSIONS = 8000
 
 const getApiEndpoint = (name, { id }) =>
   API_SERVER +
@@ -20,12 +20,12 @@ const getApiEndpoint = (name, { id }) =>
 
 const sleep = async ms => {
   console.warn('Sleep', ms)
-  return new Promise(resolve => setTimeout(resolve, 0))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 const pickAvailableCourse = courses => {
   if (process.env.DEV) {
-    return 'advanced-react-patterns'
+    return 'functional-javascript-v2'
   }
 
   const courseIds = Object.keys(courses)
@@ -174,6 +174,8 @@ const crawl = async configs => {
       console.warn(`Downloading ${videoUrl}`)
 
       const buffer = await getVideoBuffer(videoUrl)
+
+      console.warn('Saving to bucket', lessonHash)
 
       await saveVideoToS3(bucketName, courseId, lessonHash, buffer)
 
