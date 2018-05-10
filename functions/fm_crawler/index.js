@@ -1,8 +1,7 @@
+import λ from 'apex.js'
 const crawl = require('./crawl')
 
-exports.handle = function(event, ctx, cb) {
-  console.log('processing event: %j', event)
-  crawl(event).then(() => {
-    cb(null, { success: true })
-  })
+exports.handle = λ(event => {
+  await crawl(event)
+  return { success: true }
 }

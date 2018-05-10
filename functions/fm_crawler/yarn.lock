@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+apex.js@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/apex.js/-/apex.js-2.0.0.tgz#8134c30ae0941aabe85945499d374a6e6abe2ce7"
+
 aws-sdk@^2.235.1:
   version "2.235.1"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.235.1.tgz#b895da9482bb5d90b2f54c45203b7a3c1c2b7cea"

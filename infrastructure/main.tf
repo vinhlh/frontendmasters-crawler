@@ -1,5 +1,34 @@
 provider "aws" {}
 
+variable "apex_function_fm_crawler" {
+  type = "string"
+}
+
+variable "apex_function_names" {
+  type = "map"
+}
+
+resource "aws_cloudwatch_event_rule" "fm_crawler" {
+  name                = "fm-crawler-event-rule"
+  schedule_expression = "rate(10 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "fm_crawler" {
+  rule      = "${aws_cloudwatch_event_rule.fm_crawler.name}"
+  target_id = "${var.apex_function_names["fm_crawler"]}"
+  arn       = "${var.apex_function_fm_crawler}"
+
+  input = "${file("../functions/fm_crawler/event.json")}"
+}
+
+resource "aws_lambda_permission" "fm_crawler" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.apex_function_names["fm_crawler"]}"
+  principal     = "events.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_event_rule.fm_crawler.arn}"
+}
+
 resource "aws_s3_bucket" "storage" {
   bucket = "my-own-bucket"
   acl    = "public-read"
