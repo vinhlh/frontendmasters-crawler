@@ -54,7 +54,7 @@ const crawl = configs => {
     return value
   }
 
-  fetch(getApiEndpoint('courseInfo', { id: courseId }), authenticatedOptions)
+  return fetch(getApiEndpoint('courseInfo', { id: courseId }), authenticatedOptions)
     .then(body => body.json())
     .then(makeLog(courseInfo => `Found courseName = ${courseInfo.title}`))
     .then(courseInfo => s3
