@@ -169,7 +169,7 @@ const crawl = async configs => {
 
       await saveVideoToS3(bucketName, courseId, lessonHash, buffer)
 
-      await sleep(3000)
+      await sleep(5000)
     })
 
     const latestCourses = await fetchAllCourses(bucketName, inputFile)
