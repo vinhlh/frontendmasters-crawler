@@ -16,9 +16,16 @@ const getApiEndpoint = (name, { id }) =>
     lessonVideo: `/video/${id}/source?r=1080&f=webm`
   }[name]
 
-const sleep = async ms => new Promise(resolve => setTimeout(resolve, 0))
+const sleep = async ms => {
+  console.warn('Sleep', ms)
+  return new Promise(resolve => setTimeout(resolve, 0))
+}
 
 const pickAvailableCourse = courses => {
+  if (process.env.DEV) {
+    return 'advanced-react-patterns'
+  }
+
   const courseIds = Object.keys(courses)
   const noneCourseId = courseIds.find(courseId => courses[courseId] === 'none')
   if (noneCourseId) {
@@ -65,7 +72,7 @@ const fetchAllCourses = (bucketName, inputFile) =>
 const isVideoExistOnS3 = async (bucketName, courseId, lessonHash) => {
   try {
     await s3
-      .getObject({
+      .headObject({
         Bucket: bucketName,
         Key: getLessonLocation(courseId, lessonHash)
       }, err => !!err)
@@ -154,6 +161,7 @@ const crawl = async configs => {
     await sleep(5000)
 
     await Promise.mapSeries(courseInfo.lessonHashes, async lessonHash => {
+      console.warn('Checking if video is existed')
       const existed = await isVideoExistOnS3(bucketName, courseId, lessonHash)
 
       if (existed) {
@@ -169,7 +177,7 @@ const crawl = async configs => {
 
       await saveVideoToS3(bucketName, courseId, lessonHash, buffer)
 
-      await sleep(5000)
+      await sleep(20000)
     })
 
     const latestCourses = await fetchAllCourses(bucketName, inputFile)
