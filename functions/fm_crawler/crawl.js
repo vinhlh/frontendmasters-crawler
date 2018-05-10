@@ -18,10 +18,15 @@ const getApiEndpoint = (name, { id }) =>
 
 const sleep = async ms => new Promise(resolve => setTimeout(resolve, 0))
 
-const pickAvailableCourse = courses =>
-  Object.keys(courses).find(
-    courseId => courses[courseId] === 'none' || courses[courseId] === 'failed'
-  )
+const pickAvailableCourse = courses => {
+  const courseIds = Object.keys(courses)
+  const noneCourseId = courseIds.find(courseId => courses[courseId] === 'none')
+  if (noneCourseId) {
+    return noneCourseId
+  }
+
+  return courseIds.find(courseId => courses[courseId] === 'failed')
+}
 
 const makeLog = logger => value => {
   console.warn(logger(value))
