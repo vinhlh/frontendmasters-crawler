@@ -161,11 +161,11 @@ const crawl = async configs => {
     await sleep(5000)
 
     await Promise.mapSeries(courseInfo.lessonHashes, async lessonHash => {
-      console.warn('Checking if video is existed')
+      console.warn('Checking if video existed', lessonHash)
       const existed = await isVideoExistOnS3(bucketName, courseId, lessonHash)
 
       if (existed) {
-        console.warn('Found a video existed', lessonHash)
+        console.warn('Found', lessonHash)
         return
       }
 
