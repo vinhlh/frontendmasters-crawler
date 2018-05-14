@@ -9,7 +9,7 @@ const s3 = new aws.S3()
 
 const API_SERVER = 'https://api.frontendmasters.com/v1/kabuki'
 
-const DELAY_BETWEEN_LESSIONS = 8000
+const DELAY_BETWEEN_LESSIONS = 10000
 
 const getApiEndpoint = (name, { id }) =>
   API_SERVER +
