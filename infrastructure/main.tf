@@ -12,6 +12,10 @@ variable "apex_function_names" {
   type = "map"
 }
 
+variable "whitelist_ips" {
+  type = "list"
+}
+
 resource "aws_cloudwatch_event_rule" "fm_crawler" {
   name                = "fm-crawler-event-rule"
   schedule_expression = "rate(10 minutes)"
@@ -69,4 +73,28 @@ resource "aws_iam_role_policy" "fm_storage" {
   ]
 }
 EOF
+}
+
+resource "aws_s3_bucket_policy" "public_access" {
+  bucket = "${aws_s3_bucket.storage.id}"
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "vinhlh.fm.webm",
+  "Statement": [
+    {
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Effect": "Deny",
+      "Resource": "${aws_s3_bucket.storage.arn}/*.webm",
+      "Condition": {
+        "NotIpAddress": {
+          "aws:SourceIp": ${jsonencode(var.whitelist_ips)}
+        }
+      }
+     }
+  ]
+}
+POLICY
 }
