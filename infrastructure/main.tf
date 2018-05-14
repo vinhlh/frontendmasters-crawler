@@ -35,7 +35,15 @@ resource "aws_lambda_permission" "fm_crawler" {
 
 resource "aws_s3_bucket" "storage" {
   bucket = "${var.bucket_name}"
-  acl    = "public-read"
+  acl    = "private"
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["*"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 300
+  }
 
   tags {
     Owner = "vinhlh"
