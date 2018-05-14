@@ -114,7 +114,7 @@ const getVideoUrl = (lessonHash, authenticatedOptions) =>
   )
     .then(resp => resp.json())
     .then(resp => {
-      if (resp.code === 400 || !resp.url) {
+      if (resp.code || !resp.url) {
         console.warn(resp)
         throw new Error('Rate limited')
       }
