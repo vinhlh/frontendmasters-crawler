@@ -64,6 +64,7 @@ resource "aws_iam_role_policy" "fm_storage" {
   "Statement": [
     {
       "Action": [
+        "s3:GetObject",
         "s3:PutObject",
         "s3:PutObjectAcl"
       ],
