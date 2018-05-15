@@ -25,7 +25,7 @@ const sleep = async ms => {
 
 const pickAvailableCourse = courses => {
   if (process.env.DEV) {
-    return 'advanced-async-js'
+    return 'testing-modular-front-end'
   }
 
   const courseIds = Object.keys(courses)
@@ -81,10 +81,20 @@ const isVideoExistOnS3 = async (bucketName, courseId, lessonHash) => {
       .promise()
     return true
   } catch (error) {
-    console.warn(error)
+    if (error.name !== 'NotFound') {
+      console.warn(error)
+    }
     return false
   }
 }
+
+const setVideoAclToPrivate = async (bucketName, courseId, lessonHash) =>
+  await s3.putObjectAcl({
+    Bucket: bucketName,
+    Key: getLessonLocation(courseId, lessonHash),
+    ACL: 'private'
+  })
+  .promise()
 
 
 const makeAuthenticatedOptions = cookie => ({
@@ -133,7 +143,7 @@ const saveVideoToS3 = (bucketName, courseId, lessonHash, buffer) =>
       Key: getLessonLocation(courseId, lessonHash),
       Body: buffer,
       ContentType: 'video/webm',
-      ACL: 'public-read'
+      ACL: 'private'
     })
     .promise()
 
@@ -167,6 +177,9 @@ const crawl = async configs => {
 
       if (existed) {
         console.warn('Found', lessonHash)
+
+        // reset ACL
+        await setVideoAclToPrivate(bucketName, courseId, lessonHash)
         return
       }
 

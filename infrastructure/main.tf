@@ -18,7 +18,7 @@ variable "whitelist_ips" {
 
 resource "aws_cloudwatch_event_rule" "fm_crawler" {
   name                = "fm-crawler-event-rule"
-  schedule_expression = "rate(15 minutes)"
+  schedule_expression = "rate(10 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "fm_crawler" {
@@ -65,6 +65,7 @@ resource "aws_iam_role_policy" "fm_storage" {
     {
       "Action": [
         "s3:GetObject",
+        "s3:GetObjectVersion",
         "s3:PutObject",
         "s3:PutObjectAcl"
       ],
@@ -87,10 +88,10 @@ resource "aws_s3_bucket_policy" "public_access" {
     {
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Effect": "Deny",
+      "Effect": "Allow",
       "Resource": "${aws_s3_bucket.storage.arn}/*.webm",
       "Condition": {
-        "NotIpAddress": {
+        "IpAddress": {
           "aws:SourceIp": ${jsonencode(var.whitelist_ips)}
         }
       }
