@@ -9,7 +9,7 @@ const s3 = new aws.S3()
 
 const API_SERVER = 'https://api.frontendmasters.com/v1/kabuki'
 
-const DELAY_BETWEEN_LESSIONS = 10000
+const DELAY_BETWEEN_LESSIONS = 22000
 
 const getApiEndpoint = (name, { id }) =>
   API_SERVER +
@@ -25,7 +25,7 @@ const sleep = async ms => {
 
 const pickAvailableCourse = courses => {
   if (process.env.DEV) {
-    return 'functional-javascript-v2'
+    return 'advanced-async-js'
   }
 
   const courseIds = Object.keys(courses)
@@ -81,6 +81,7 @@ const isVideoExistOnS3 = async (bucketName, courseId, lessonHash) => {
       .promise()
     return true
   } catch (error) {
+    console.warn(error)
     return false
   }
 }
