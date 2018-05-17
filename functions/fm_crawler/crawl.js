@@ -84,6 +84,12 @@ const isVideoExistOnS3 = async (bucketName, courseId, lessonHash) => {
     if (error.name !== 'NotFound') {
       console.warn(error)
     }
+
+    // prevent downloading again
+    if (error.name === 'Forbidden') {
+      return true
+    }
+
     return false
   }
 }
