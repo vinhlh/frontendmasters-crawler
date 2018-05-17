@@ -34,7 +34,13 @@ const pickAvailableCourse = courses => {
     return noneCourseId
   }
 
-  return courseIds.find(courseId => courses[courseId] === 'failed')
+  const failedCourseId = courseIds.find(courseId => courses[courseId] === 'failed')
+
+  if (failedCourseId) {
+    return failedCourseId
+  }
+
+  return courseIds.find(courseId => courses[courseId] === 'downloading')
 }
 
 const makeLog = logger => value => {
