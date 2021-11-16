@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "apex.js": "^2.0.0",
-    "aws-sdk": "^2.235.1",
+    "aws-sdk": "^2.814.0",
     "bluebird": "^3.5.1",
     "node-fetch": "^2.1.2"
   }
